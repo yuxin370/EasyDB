@@ -1,98 +1,95 @@
 # EasyDB
 
-EasyDB是一个数据库，支持大多数SQL语句。
+EasyDB is a database system that supports most SQL statements.
 
+# Getting Started
 
-# Getting Start
+## Install Nix and Enable Flakes
 
-## 安装Nix，开启Flake
-
-编译环境的构建使用了Nix Flake，所以在使用之前需要进行相应配置。运行以下命令即可安装Nix：
+The build environment is managed using Nix Flakes. Before using EasyDB, please ensure that Nix is properly installed and flakes are enabled. Run the following command to install Nix:
 
 ```shell
 sh <(curl -L https://nixos.org/nix/install) --daemon
 ```
 
-修改`/etc/nix/nix.conf`，在其中添加下面的内容，即可开启Flake
+Then, modify `/etc/nix/nix.conf` and add the following lines to enable Flake support:
 
 ```
 substituters = https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store https://cache.nixos.org/
 experimental-features = nix-command flakes
 ```
 
-## 编译
+## Build
 
-运行以下命令行，无需进行任何环境配置，nix会自动下载该项目的依赖包，并进行编译。首次编译时间可能会比较长，请耐心等待。编译结果会放在项目目录下的`result`目录中。
+To compile the project, simply run the command below. Nix will automatically download all dependencies and build the project. The first build may take some time. The build output will be placed in the `result` directory in the project root.
 
 ```shell
 nix build
 ```
 
-`result`目录结构如下：
+The `result` directory structure is as follows:
 
 ```
 result
 ├── bin
-│   ├── easydb_client  #easydb的CLI客户端
-│   └── easydb_server  #easydb的服务端
-└── test #测试文件编译得出的二进制
+│   ├── easydb_client  # CLI client for EasyDB
+│   └── easydb_server  # Server component of EasyDB
+└── test               # Compiled binaries for testing
 ```
 
-## 开发环境
+## Development Environment
 
-运行以下命令，nix会开启一个新的shell，该shell已经配置好了能够编译该项目的环境，这时使用cmake的编译方式正常编译即可。 在此终端中使用`code`等命令开启vscode可以让vscode等IDE找到对应的环境。
+Run the following command to open a new shell with all necessary dependencies set up for development. In this shell, you can use CMake to compile the project as usual. Tools like VSCode can recognize the environment if launched from this terminal (e.g., by running `code`).
 
 ```shell
 nix develop
 ```
 
-## 运行
+## Running
 
+### CLI Interaction
 
-### 使用CLI交互
-
-先编译出easydb的服务端，然后执行以下代码运行：
+First, build the EasyDB server, then start it with the following command:
 
 ```shell
 ./result/bin/easydb_server -p 8888 -d test.db
 ```
 
-然后重新开一个终端，运行以下命令：
+Open another terminal and run the client:
 
 ```shell
 ./result/bin/easydb_client -p 8888
 ```
 
-### 使用Web GUI交互
+### Web GUI Interaction
 
-先编译出easydb的服务端，然后执行以下代码运行：
+To enable Web GUI, start the EasyDB server with the web mode enabled:
 
 ```shell
-./result/bin/easydb_server -p 8888 -d test.db -w 
+./result/bin/easydb_server -p 8888 -d test.db -w
 ```
 
-然后运行以下命令激活开发环境：
+Activate the development environment:
 
 ```shell
 nix develop .
 ```
 
-最后启动web界面和python写的代理服务器：
+Then start the web interface and the Python-based proxy server.
 
-其中一个终端：
+In one terminal:
 
-```shell 
+```shell
 cd web_client
 python ./proxy/proxy_server.py 
 ```
 
+In another terminal:
 
-开启另一个终端：
-
-```shell 
+```shell
 cd web_client
 npm install
 npm run dev
 ```
 
-然后访问 http://localhost:2000/ 就可以打开web界面。
+Finally, open your browser and visit [http://localhost:2000/](http://localhost:2000/) to access the web interface.
