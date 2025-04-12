@@ -94,6 +94,6 @@ npm run dev
 
 Finally, open your browser and visit [http://localhost:2000/](http://localhost:2000/) to access the web interface.
 
-### Team Members
+# Team Members
 
 EasyDB was collaboratively developed by Yuxin Tang, Qiangjun Zhou, Zhigan Zhou and Yang Zi, all Master Students from School of Information, Renmin University of China.
